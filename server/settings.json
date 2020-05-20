@@ -1,11 +1,15 @@
 {
   "centres": {
-    "nemzy-1": {
-      "auth": [""],
-      "groups": [""]
-    },
-  "securityToken": "",
+    "polaris_test": {
+      "auth": [
+        "AUTH_KEY_1"
+      ],
+      "groups": [
+        3812352
+      ]
+    }
+  },
+  "securityToken": "POLARIS_RANK_SYSTEM_2KEn",
   "port": 40,
-  "user": "",
-  "pass": ""
+  "cookie": ""
 }

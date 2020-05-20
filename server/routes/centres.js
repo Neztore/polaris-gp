@@ -3,6 +3,9 @@ const router = express.Router();
 const settings = require("../settings.json");
 const { setRank } = require('../util/Roblox.js');
 
+// TODO: Refactor
+// This is a mess. Validations could be done better.
+
 router.get('/', function (req, res) {
 	res.status(200).send({message: "Centre home page", status: 200});
 });
@@ -38,11 +41,11 @@ router.post('/:id/rank/:groupId', catchAsyncErrors(async function (req, res) {
 		if (opt) {
 			if (opt.auth.includes(req.headers.authorization)) {
 				// Req. is auth and good.
-				if (opt.groups.includes(req.params.groupId)) {
+				if (validNum(req.params.groupId) && opt.groups.includes(parseInt(req.params.groupId, 10))) {
 					if (req.body.newRank && validNum(req.body.newRank)) {
 					    if (!req.body.userId || !validNum(req.body.userId)) {
-					        return res.status(400).send({error: {status: 400, message: `User id must be a number`}});
-                        }
+								return res.status(400).send({ error: { status: 400, message: `User id must be a number` } });
+							}
 						const rank = parseInt(req.body.newRank, 10);
 						if (rank > 0 && rank < 255) {
                             const succ = await setRank(req.body.userId, req.params.groupId, req.body.newRank);

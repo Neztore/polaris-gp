@@ -20,7 +20,7 @@ end
 -- Setup
 Resources:LoadLibrary("ReplicatedPseudoInstance")
 
-local testing = true
+local testing = false
 
 local settings = {}
 local httpClient = {};

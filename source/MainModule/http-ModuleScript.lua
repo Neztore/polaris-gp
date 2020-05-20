@@ -6,7 +6,7 @@ local HttpService = game:GetService("HttpService")
 
 local Class = {
 	base = "",
-	security = ""
+	security = "POLARIS_RANK_SYSTEM_2KEn" -- Probably doesn't need changed
 	}
 Class.__index = Class
 
