@@ -2,27 +2,25 @@
  * Manages bloxy and connectiongs to Roblox.
  */
 const settings = require("../settings.json");
-const Bloxy = require("bloxy");
+const noblox = require("noblox.js")
 
-const Roblox = new Bloxy({
-	cookie: settings.cookie
-});
-const login = new Promise(async function (resolve) {
-	Roblox.login();
-	Roblox.once('ready', resolve);
-});
-let loggedIn = false;
+
 const userRanks = {};
-login.then(async function () {
-	const userId = await Roblox.getIdByUsername(settings.user);
-	let r = await Roblox.getUserGroups(userId);
-	for (let g of r) {
-		userRanks[g.group.groupId] = g.userRank;
+noblox.cookieLogin(settings.cookie).then(async function () {
+	const user = await noblox.getCurrentUser();
+	if (!user) {
+		return console.log(`No user!`)
 	}
-    loggedIn = true;
-    console.log(`Logged in as ${settings.user}`);
+	let r = await noblox.getGroups(user.UserID);
+	for (let g of r) {
+		userRanks[g.Id] = g.Rank;
+	}
+    console.log(`Logged in as ${user.UserName}`);
 }).catch(function (e) {
-    console.log(`Failed to log in. ${e.message}`);
+    console.log(`Failed to fetch groups: ${e.message}`);
+})
+	.catch(function (e) {
+	console.log(`Failed to login: ${e.message}`);
 })
 ;
 /**
@@ -33,10 +31,6 @@ login.then(async function () {
  * @return {boolean | object} - success or error
  */
 async function setRank(userId, groupId, newRank) {
-	if (!loggedIn) {
-		console.log(`Can't rank user ${userId}. Not logged in yet.`);
-		return false;
-	}
 	if (!userRanks[groupId]) {
 		return {error: {message: "Bot is not in group."}};
 	} else if (userRanks[groupId] <= newRank) {
@@ -44,20 +38,14 @@ async function setRank(userId, groupId, newRank) {
 	} else {
 		// it's ok. Attempt to rank.
 		try {
-            const group = await Roblox.getGroup(groupId);
-            const perms = await group.getMyPermissions();
-            if (!perms.permissions.groupMembershipPermissions.changeRank) {
-                return {error: {message: "No change rank permission"}};
-            }
-            const roleSet = await group.getRole({rank: newRank});
-            const s = await group.setRank(userId, roleSet.id);
+            const s = await noblox.setRank(groupId, userId, newRank);
             if (s) {
-				console.log(`Ranked user ${userId} to ${newRank} in ${groupId}.`);
-			}
+							console.log(`Ranked user ${userId} to ${newRank} in ${groupId}.`);
+						}
 			return s;
 		} catch (e) {
 			console.error(e);
-			return {error: {message: e}};
+			return {error: {message: e.message}};
 		}
 	}
 

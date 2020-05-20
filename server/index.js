@@ -7,7 +7,7 @@ const Ratelimit = require('./util/ratelimit.js');
 const centres = require('./routes/centres');
 app.use(express.json());
 
-// respond with "hello world" when a GET request is made to the homepage
+
 app.get('/', function (req, res) {
     res.send({
         message: "Polaris promotion system root",

@@ -1,11 +1,11 @@
 {
   "centres": {
-    "nemzy-1": {
+    "polaris_test": {
       "auth": [
         "AUTH_KEY_1"
       ],
       "groups": [
-        0
+        3812352
       ]
     }
   },
