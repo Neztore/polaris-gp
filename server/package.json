@@ -1,6 +1,6 @@
 {
   "name": "polaris-promotion-system",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "The Polaris promotion system provides the server side of polaris promotion centres.",
   "main": "index.js",
   "scripts": {
