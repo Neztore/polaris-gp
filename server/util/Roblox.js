@@ -1,16 +1,13 @@
 /**
- * Manages bloxy and connectiongs to Roblox.
+ * Manages connections to Roblox.
  */
 const settings = require("../settings.json");
 const noblox = require("noblox.js")
 
 
 const userRanks = {};
-noblox.cookieLogin(settings.cookie).then(async function () {
-	const user = await noblox.getCurrentUser();
-	if (!user) {
-		return console.log(`No user!`)
-	}
+noblox.setCookie(settings.cookie).then(async function (user) {
+	if (!user) return;
 	let r = await noblox.getGroups(user.UserID);
 	for (let g of r) {
 		userRanks[g.Id] = g.Rank;
